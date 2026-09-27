@@ -1,0 +1,133 @@
+ATIVIDADE 1 - MONGODB
+======================
+
+ETAPA 1 - IMPORTAÇÃO DO DATASET
+
+Banco de dados: atividade1
+Collection: restaurants
+
+Comando utilizado para importação:
+
+mongoimport --db atividade1 --collection restaurants --file restaurants.json
+
+Comandos para verificação:
+
+use atividade1
+
+show collections
+
+db.restaurants.countDocuments()
+
+db.restaurants.findOne()
+
+
+ETAPA 2 - INSERÇÃO DO RESTAURANTE VELLA
+
+db.restaurants.insertOne({
+  address: {
+    building: "1480",
+    coord: [-73.9557413, 40.7720266],
+    street: "2 Avenue",
+    zipcode: "10075"
+  },
+  borough: "Manhattan",
+  cuisine: "Italian",
+  grades: [
+    {
+      date: ISODate("2014-10-01T00:00:00Z"),
+      grade: "A",
+      score: 11
+    }
+  ],
+  name: "Vella",
+  restaurant_id: "41704620"
+})
+
+Verificação:
+
+db.restaurants.find({ name: "Vella" })
+
+db.restaurants.countDocuments()
+
+
+ETAPA 3 - CONSULTAS BÁSICAS
+
+1. Listar todos os documentos:
+
+db.restaurants.find()
+
+
+2. Exibir restaurant_id, name, borough e cuisine:
+
+db.restaurants.find(
+  {},
+  {
+    restaurant_id: 1,
+    name: 1,
+    borough: 1,
+    cuisine: 1,
+    _id: 0
+  }
+)
+
+
+3. Ordenar os restaurantes pelo nome em ordem crescente:
+
+db.restaurants.find(
+  {},
+  {
+    restaurant_id: 1,
+    name: 1,
+    borough: 1,
+    cuisine: 1,
+    _id: 0
+  }
+).sort({ name: 1 })
+
+
+4. Ordenar os restaurantes pelo nome em ordem decrescente:
+
+db.restaurants.find(
+  {},
+  {
+    restaurant_id: 1,
+    name: 1,
+    borough: 1,
+    cuisine: 1,
+    _id: 0
+  }
+).sort({ name: -1 })
+
+
+ETAPA 4 - CONSULTAS COM OPERADORES
+
+1. Restaurantes com score maior que 30:
+
+db.restaurants.find({
+  "grades.score": { $gt: 30 }
+})
+
+
+2. Restaurantes com score menor que 10:
+
+db.restaurants.find({
+  "grades.score": { $lt: 10 }
+})
+
+
+3. Restaurantes com cuisine diferente de American e score maior que 70:
+
+db.restaurants.find({
+  cuisine: { $ne: "American " },
+  "grades.score": { $gt: 70 }
+})
+
+
+4. Consulta utilizando o operador $or:
+
+db.restaurants.find({
+  $or: [
+    { cuisine: "Italian" },
+    { borough: "Manhattan" }
+  ]
+})
